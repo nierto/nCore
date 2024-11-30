@@ -13,7 +13,7 @@
 namespace NiertoCube\PostTypes;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -87,7 +87,7 @@ class PostTypeManager implements ModuleInterface {
             $this->initialized = true;
 
         } catch (\Exception $e) {
-            if ($error = NiertoCore::getInstance()->getModule('Error')) {
+            if ($error = nCore::getInstance()->getModule('Error')) {
                 $error->logError('post_types_init_failed', $e->getMessage());
             }
             throw $e;
@@ -218,7 +218,7 @@ class PostTypeManager implements ModuleInterface {
         }
 
         // Clear related caches
-        if ($cache = NiertoCore::getInstance()->getModule('Cache')) {
+        if ($cache = nCore::getInstance()->getModule('Cache')) {
             $cache->delete("face_content_{$post_id}");
         }
     }

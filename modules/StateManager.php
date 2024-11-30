@@ -90,8 +90,8 @@ class StateManager implements ModuleInterface, \ArrayAccess {
      */
     private function initializeCore(): void {
         try {
-            // Get NiertoCore instance
-            $core = \NiertoCube\Core\NiertoCore::getInstance();
+            // Get nCore instance
+            $core = \NiertoCube\Core\nCore::getInstance();
 
             // Initialize Error Manager (Level 0 dependency)
             $this->errorManager = $core->getModule('Error');

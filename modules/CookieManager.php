@@ -15,7 +15,7 @@
  * 
  * ARCHITECTURE OVERVIEW
  * ====================
- * - Implements ModuleInterface for NiertoCore integration
+ * - Implements ModuleInterface for nCore integration
  * - Uses Strategy pattern for different consent storage methods
  * - Event-driven architecture for consent changes
  * - Integrates with WordPress privacy tools
@@ -56,8 +56,8 @@
  * 
  * USAGE
  * =====
- * // Get instance through NiertoCore
- * $cookie_manager = NiertoCore::getInstance()->getModule('Cookie');
+ * // Get instance through nCore
+ * $cookie_manager = nCore::getInstance()->getModule('Cookie');
  * 
  * // Check consent
  * if ($cookie_manager->hasConsent('analytics')) {
@@ -96,7 +96,7 @@
 namespace Nierto\Modules;
 
 use Nierto\Core\ModuleInterface;
-use Nierto\Core\NiertoCore;
+use Nierto\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -186,7 +186,7 @@ class CookieManager implements ModuleInterface {
             ], $config);
 
             // Get dependencies
-            $core = NiertoCore::getInstance();
+            $core = nCore::getInstance();
             $this->error = $core->getModule('Error');
             $this->cache = $core->getModule('Cache');
 

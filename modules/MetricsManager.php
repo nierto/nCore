@@ -45,7 +45,7 @@
 namespace NiertoCube\Modules;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -145,7 +145,7 @@ class MetricsManager implements ModuleInterface {
             $this->config = array_merge($this->default_config, $config);
 
             // Initialize dependencies
-            $core = NiertoCore::getInstance();
+            $core = nCore::getInstance();
             $this->error = $core->getModule('Error');
             $this->cache = $core->getModule('Cache');
 
@@ -244,7 +244,7 @@ class MetricsManager implements ModuleInterface {
     private function registerAPIEndpoints(): void {
         if (!$this->initialized) return;
 
-        $api = NiertoCore::getInstance()->getModule('API');
+        $api = nCore::getInstance()->getModule('API');
         if ($api && $api->isInitialized()) {
             $api->registerEndpoint('metrics/summary', [$this, 'getMetricsSummary']);
             $api->registerEndpoint('metrics/performance', [$this, 'getPerformanceMetrics']);
@@ -429,7 +429,7 @@ class MetricsManager implements ModuleInterface {
     public function trackPWAMetrics(): void {
         if (!$this->initialized) return;
 
-        $manifest = NiertoCore::getInstance()->getModule('Manifest');
+        $manifest = nCore::getInstance()->getModule('Manifest');
         if ($manifest && $manifest->isInitialized()) {
             $this->recordMetric('pwa_status', [
                 'installed' => $manifest->isInstalled(),

@@ -25,7 +25,7 @@
 namespace NiertoCube\Modules;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -228,7 +228,7 @@ class LogoManager implements ModuleInterface {
         }
 
         try {
-            $cache = NiertoCore::getInstance()->getModule('Cache');
+            $cache = nCore::getInstance()->getModule('Cache');
             $cached_data = $cache->get('logo_data', 'theme');
 
             if ($cached_data !== false) {

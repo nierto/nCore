@@ -4,7 +4,7 @@
  * VersionManager - Advanced Version Control and Cache Invalidation System
  * 
  * Provides comprehensive version tracking and cache invalidation functionality for the NiertoCube theme.
- * Implements ModuleInterface for standardized integration with the NiertoCore system while maintaining
+ * Implements ModuleInterface for standardized integration with the nCore system while maintaining
  * backward compatibility with existing version control mechanisms.
  * 
  * ARCHITECTURE
@@ -68,7 +68,7 @@
  * Required:
  * - WordPress 5.0+
  * - PHP 7.4+
- * - NiertoCore System
+ * - nCore System
  * - ModuleInterface
  * 
  * Optional:
@@ -139,7 +139,7 @@
  * @version     2.0.0
  * 
  * @see \NiertoCube\Core\ModuleInterface
- * @see \NiertoCube\Core\NiertoCore
+ * @see \NiertoCube\Core\nCore
  * 
  * @method static VersionManager getInstance()     Get singleton instance
  * @method void initialize(array $config = [])    Initialize the module
@@ -151,7 +151,7 @@
 namespace NiertoCube\Modules;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 class VersionManager implements ModuleInterface {
     /** @var VersionManager Singleton instance */

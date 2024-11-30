@@ -4,7 +4,7 @@
  * 
  * This class manages the Progressive Web App manifest functionality for the NiertoCube theme.
  * It handles manifest generation, caching, and delivery through both REST API and direct access.
- * It implements proper ModuleInterface integration within the NiertoCore system.
+ * It implements proper ModuleInterface integration within the nCore system.
  * 
  * @package     NiertoCube
  * @subpackage  PWA
@@ -24,10 +24,10 @@
  * == Dependencies ==
  * Core:
  * - WordPress Core (add_action, rest_api_init, customize_register)
- * - NiertoCore system
+ * - nCore system
  * - ModuleInterface
  * 
- * Managers (accessed through NiertoCore):
+ * Managers (accessed through nCore):
  * - ErrorManager  : For error logging
  * - CacheManager  : For manifest caching
  * 
@@ -96,7 +96,7 @@
  * 
  * == Changelog ==
  * 2.0.0
- * - Implemented proper NiertoCore integration
+ * - Implemented proper nCore integration
  * - Added comprehensive error handling
  * - Enhanced caching system
  * - Improved customizer integration
@@ -112,14 +112,14 @@
  * @link      https://nierto.com Documentation
  * 
  * @see \NiertoCube\Core\ModuleInterface
- * @see \NiertoCube\Core\NiertoCore
+ * @see \NiertoCube\Core\nCore
  */
 
 
 namespace NiertoCube\Modules;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -215,7 +215,7 @@ class ManifestManager implements ModuleInterface {
      */
     public function getManifestData(): array {
         try {
-            $core = NiertoCore::getInstance();
+            $core = nCore::getInstance();
             
             // Try cache first
             if ($this->config['cache_enabled'] && $cache = $core->getModule('Cache')) {
@@ -428,7 +428,7 @@ class ManifestManager implements ModuleInterface {
      * Invalidate manifest cache
      */
     public function invalidateCache(): void {
-        $core = NiertoCore::getInstance();
+        $core = nCore::getInstance();
         if ($cache = $core->getModule('Cache')) {
             $cache->delete('manifest', $this->config['cache_group']);
         }
@@ -440,7 +440,7 @@ class ManifestManager implements ModuleInterface {
      * @param string $message Error message
      */
     private function logError(string $message): void {
-        $core = NiertoCore::getInstance();
+        $core = nCore::getInstance();
         if ($error = $core->getModule('Error')) {
             $error->logError('manifest_error', $message);
         } else {

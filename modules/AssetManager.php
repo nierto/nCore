@@ -3,7 +3,7 @@
  * NiertoCube Asset Management System
  * 
  * Implements modular asset loading, dependency management, and optimization
- * through the NiertoCore architecture. Provides systematic approach to
+ * through the nCore architecture. Provides systematic approach to
  * script/style registration, localization, and conditional loading.
  *
  * @package     NiertoCube
@@ -14,7 +14,7 @@
 namespace NiertoCube\Setup;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -101,7 +101,7 @@ class AssetManager implements ModuleInterface {
      */
     public function enqueueAssets(): void {
         try {
-            $performance = NiertoCore::getInstance()->getModule('Metrics');
+            $performance = nCore::getInstance()->getModule('Metrics');
             $start_time = microtime(true);
 
             // Core Styles
@@ -324,7 +324,7 @@ class AssetManager implements ModuleInterface {
 // Initialize AssetManager
 add_action('after_setup_theme', function() {
     try {
-        $core = NiertoCore::getInstance();
+        $core = nCore::getInstance();
         $core->registerModule(
             'Assets',
             AssetManager::class,

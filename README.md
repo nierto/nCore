@@ -1,4 +1,4 @@
-# NiertoCore Theme Development Template
+# nCore Theme Development Template
 
 A modular WordPress theme development framework featuring advanced state management, 
 resource optimization, and comprehensive caching.
@@ -13,7 +13,7 @@ resource optimization, and comprehensive caching.
 ## Quick Start
 1. Clone this template
 2. Configure core settings in `config/default-config.php`
-3. Initialize NiertoCore in your theme's `functions.php`
+3. Initialize nCore in your theme's `functions.php`
 4. Extend functionality through manager interfaces
 
 ## Documentation

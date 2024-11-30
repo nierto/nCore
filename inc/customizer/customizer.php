@@ -3,7 +3,7 @@
  * CustomizerManager - WordPress Customizer Integration for NiertoCube
  * 
  * Manages all customizer functionality including registration, preview handling,
- * and real-time updates. Implements ModuleInterface for NiertoCore integration.
+ * and real-time updates. Implements ModuleInterface for nCore integration.
  * 
  * @package     NiertoCube
  * @subpackage  Customizer
@@ -28,7 +28,7 @@
  * Integration Points:
  * ----------------
  * - WordPress Customizer API
- * - NiertoCore Module System
+ * - nCore Module System
  * - PostTypeManager for face settings
  * - CacheManager for setting storage
  * 
@@ -39,7 +39,7 @@
 namespace NiertoCube\Modules;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -317,7 +317,7 @@ class CustomizerManager implements ModuleInterface {
      */
     public function handleCustomizerSave(): void {
         if ($this->config['cache_enabled']) {
-            $cache = NiertoCore::getInstance()->getModule('Cache');
+            $cache = nCore::getInstance()->getModule('Cache');
             $cache->flush('customizer');
         }
 

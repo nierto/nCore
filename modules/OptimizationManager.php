@@ -36,7 +36,7 @@
 namespace NiertoCube\Modules;
 
 use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\NiertoCore;
+use NiertoCube\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -105,7 +105,7 @@ class OptimizationManager implements ModuleInterface {
 
             // Get metrics manager if available
             try {
-                $this->metrics = NiertoCore::getInstance()->getModule('Metrics');
+                $this->metrics = nCore::getInstance()->getModule('Metrics');
             } catch (\Exception $e) {
                 // Metrics unavailable - continue without metrics
             }
