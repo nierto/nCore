@@ -2,17 +2,17 @@
 /**
  * CacheManager - Independent Cache Management System
  * 
- * Provides a comprehensive caching solution for the NiertoCube theme with zero external
+ * Provides a comprehensive caching solution for the nCore theme with zero external
  * dependencies. Implements multiple caching strategies (ValKey/Transients), automatic
  * fallback mechanisms, and self-contained monitoring systems.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Core
  * @version     2.0.0
  * @since       1.0.0
  * 
  * == File Purpose ==
- * Serves as a standalone caching system for the NiertoCube theme, managing all caching
+ * Serves as a standalone caching system for the nCore theme, managing all caching
  * operations through strategy pattern implementation, with support for different backends
  * and automatic fallback mechanisms.
  * 
@@ -130,19 +130,19 @@
  * - Simple metrics
  * 
  * @author    Niels Erik Toren
- * @copyright 2024 NiertoCube
+ * @copyright 2024 nCore
  * @license   See project root for license information
  * @link      https://nierto.com Documentation
  * 
- * @see \NiertoCube\Core\ModuleInterface
- * @see \NiertoCube\Cache\CacheStrategyInterface
- * @see \NiertoCube\Cache\ValKeyStrategy
- * @see \NiertoCube\Cache\TransientStrategy
+ * @see \nCore\Core\ModuleInterface
+ * @see \nCore\Cache\CacheStrategyInterface
+ * @see \nCore\Cache\ValKeyStrategy
+ * @see \nCore\Cache\TransientStrategy
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
+use nCore\Core\ModuleInterface;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -210,7 +210,7 @@ class CacheManager implements ModuleInterface {
                 'enabled' => true,
                 'strategy' => 'valkey',
                 'fallback_strategy' => 'transient',
-                'prefix' => 'nierto_cube_',
+                'prefix' => 'nCore_',
                 'debug' => WP_DEBUG,
                 'default_ttl' => HOUR_IN_SECONDS,
                 'max_ttl' => WEEK_IN_SECONDS,

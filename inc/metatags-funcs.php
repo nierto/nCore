@@ -1,12 +1,12 @@
 <?php
 /**
- * NiertoCube Meta Tags Management System
+ * nCore Meta Tags Management System
  * 
  * Handles SEO metadata for cube faces, including title and description management.
  * This file provides functionality for adding, storing, and rendering meta tags
  * specifically for the cube_face custom post type.
  *
- * @package NiertoCube
+ * @package nCore
  * @subpackage SEO
  * @since 1.0.0
  * 
@@ -22,15 +22,15 @@
  * - Hooks: add_meta_boxes, save_post, wp_head
  *
  * @key-functions
- * nierto_cube_add_seo_meta_box()     - Registers SEO meta box in admin interface
- * nierto_cube_seo_meta_box_callback() - Renders meta box interface
- * nierto_cube_save_seo_meta_box_data()- Handles meta data saving
- * nierto_cube_add_meta_tags()         - Outputs meta tags in frontend
+ * nCore_add_seo_meta_box()     - Registers SEO meta box in admin interface
+ * nCore_seo_meta_box_callback() - Renders meta box interface
+ * nCore_save_seo_meta_box_data()- Handles meta data saving
+ * nCore_add_meta_tags()         - Outputs meta tags in frontend
  *
  * @data-structure
  * Meta Keys:
- * - _nierto_cube_meta_title       - SEO title for cube face
- * - _nierto_cube_meta_description - SEO description for cube face
+ * - _nCore_meta_title       - SEO title for cube face
+ * - _nCore_meta_description - SEO description for cube face
  *
  * @usage
  * Meta tags are automatically added to wp_head for cube_face post types when
@@ -82,36 +82,36 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function nierto_cube_add_seo_meta_box() {
+function nCore_add_seo_meta_box() {
     add_meta_box(
-        'nierto_cube_seo_meta_box',
+        'nCore_seo_meta_box',
         'SEO Settings',
-        'nierto_cube_seo_meta_box_callback',
+        'nCore_seo_meta_box_callback',
         'cube_face',
         'normal',
         'high'
     );
 }
-add_action('add_meta_boxes', 'nierto_cube_add_seo_meta_box');
+add_action('add_meta_boxes', 'nCore_add_seo_meta_box');
 
-function nierto_cube_seo_meta_box_callback($post) {
-    wp_nonce_field('nierto_cube_save_seo_meta_box_data', 'nierto_cube_seo_meta_box_nonce');
+function nCore_seo_meta_box_callback($post) {
+    wp_nonce_field('nCore_save_seo_meta_box_data', 'nCore_seo_meta_box_nonce');
 
-    $meta_title = get_post_meta($post->ID, '_nierto_cube_meta_title', true);
-    $meta_description = get_post_meta($post->ID, '_nierto_cube_meta_description', true);
+    $meta_title = get_post_meta($post->ID, '_nCore_meta_title', true);
+    $meta_description = get_post_meta($post->ID, '_nCore_meta_description', true);
 
-    echo '<p><label for="nierto_cube_meta_title">Meta Title</label><br>';
-    echo '<input type="text" id="nierto_cube_meta_title" name="nierto_cube_meta_title" value="' . esc_attr($meta_title) . '" size="50"></p>';
+    echo '<p><label for="nCore_meta_title">Meta Title</label><br>';
+    echo '<input type="text" id="nCore_meta_title" name="nCore_meta_title" value="' . esc_attr($meta_title) . '" size="50"></p>';
 
-    echo '<p><label for="nierto_cube_meta_description">Meta Description</label><br>';
-    echo '<textarea id="nierto_cube_meta_description" name="nierto_cube_meta_description" rows="4" cols="50">' . esc_textarea($meta_description) . '</textarea></p>';
+    echo '<p><label for="nCore_meta_description">Meta Description</label><br>';
+    echo '<textarea id="nCore_meta_description" name="nCore_meta_description" rows="4" cols="50">' . esc_textarea($meta_description) . '</textarea></p>';
 }
 
-function nierto_cube_save_seo_meta_box_data($post_id) {
-    if (!isset($_POST['nierto_cube_seo_meta_box_nonce'])) {
+function nCore_save_seo_meta_box_data($post_id) {
+    if (!isset($_POST['nCore_seo_meta_box_nonce'])) {
         return;
     }
-    if (!wp_verify_nonce($_POST['nierto_cube_seo_meta_box_nonce'], 'nierto_cube_save_seo_meta_box_data')) {
+    if (!wp_verify_nonce($_POST['nCore_seo_meta_box_nonce'], 'nCore_save_seo_meta_box_data')) {
         return;
     }
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
@@ -121,20 +121,20 @@ function nierto_cube_save_seo_meta_box_data($post_id) {
         return;
     }
 
-    if (isset($_POST['nierto_cube_meta_title'])) {
-        update_post_meta($post_id, '_nierto_cube_meta_title', sanitize_text_field($_POST['nierto_cube_meta_title']));
+    if (isset($_POST['nCore_meta_title'])) {
+        update_post_meta($post_id, '_nCore_meta_title', sanitize_text_field($_POST['nCore_meta_title']));
     }
-    if (isset($_POST['nierto_cube_meta_description'])) {
-        update_post_meta($post_id, '_nierto_cube_meta_description', sanitize_textarea_field($_POST['nierto_cube_meta_description']));
+    if (isset($_POST['nCore_meta_description'])) {
+        update_post_meta($post_id, '_nCore_meta_description', sanitize_textarea_field($_POST['nCore_meta_description']));
     }
 }
-add_action('save_post', 'nierto_cube_save_seo_meta_box_data');
+add_action('save_post', 'nCore_save_seo_meta_box_data');
 
-function nierto_cube_add_meta_tags() {
+function nCore_add_meta_tags() {
     if (is_singular('cube_face')) {
         $post_id = get_the_ID();
-        $meta_title = get_post_meta($post_id, '_nierto_cube_meta_title', true);
-        $meta_description = get_post_meta($post_id, '_nierto_cube_meta_description', true);
+        $meta_title = get_post_meta($post_id, '_nCore_meta_title', true);
+        $meta_description = get_post_meta($post_id, '_nCore_meta_description', true);
 
         if (!empty($meta_title)) {
             echo '<meta name="title" content="' . esc_attr($meta_title) . '">' . "\n";
@@ -144,4 +144,4 @@ function nierto_cube_add_meta_tags() {
         }
     }
 }
-add_action('wp_head', 'nierto_cube_add_meta_tags');
+add_action('wp_head', 'nCore_add_meta_tags');

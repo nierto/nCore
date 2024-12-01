@@ -1,11 +1,11 @@
 <?php
 /**
- * NiertoCube Sanitization Functions
+ * nCore Sanitization Functions
  * 
- * Provides core sanitization functionality for the NiertoCube theme, ensuring
+ * Provides core sanitization functionality for the nCore theme, ensuring
  * data security and validation across theme customizer options and user inputs.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Security
  * @since       1.0.0
  * 
@@ -20,18 +20,18 @@
  * =========================
  * KEY FUNCTIONS
  * =========================
- * nierto_cube_sanitize_hex_color()
+ * nCore_sanitize_hex_color()
  * - Validates and sanitizes hexadecimal color values
  * - Input: String (potential hex color)
  * - Output: Valid hex color or null
  * 
- * nierto_cube_sanitize_css_value()
+ * nCore_sanitize_css_value()
  * - Validates CSS measurements including units
  * - Input: String (CSS value with unit)
  * - Output: Valid CSS value or null
  * - Supported units: px, em, rem, %, vw, vh, vmin, vmax
  * 
- * nierto_cube_sanitize_option()
+ * nCore_sanitize_option()
  * - Validates customizer option against allowed choices
  * - Input: Mixed value, WP_Customize_Setting object
  * - Output: Sanitized value or default setting
@@ -87,7 +87,7 @@
  * 
  * @author     Niels Erik Toren
  * @copyright  2024 Nierto
- * @license    NiertoCube License
+ * @license    nCore License
  * @version    1.0.0
  */
 
@@ -96,7 +96,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function nierto_cube_sanitize_hex_color($color) {
+function nCore_sanitize_hex_color($color) {
     if ('' === $color) {
         return '';
     }
@@ -106,7 +106,7 @@ function nierto_cube_sanitize_hex_color($color) {
     return null;
 }
 
-function nierto_cube_sanitize_css_value($input) {
+function nCore_sanitize_css_value($input) {
     $valid_units = ['px', 'em', 'rem', '%', 'vw', 'vh', 'vmin', 'vmax'];
     $pattern = '/^(\d*\.?\d+)(' . implode('|', $valid_units) . ')?$/';
     if (preg_match($pattern, $input)) {
@@ -115,7 +115,7 @@ function nierto_cube_sanitize_css_value($input) {
     return null;
 }
 
-function nierto_cube_sanitize_option($input, $setting) {
+function nCore_sanitize_option($input, $setting) {
     $choices = $setting->manager->get_control($setting->id)->choices;
     return (array_key_exists($input, $choices) ? $input : $setting->default);
 }

@@ -17,15 +17,15 @@
  * - Progressive asset loading
  * - Dimensional coherence maintenance
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules
  * @version     2.0.0
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\nCore;
+use nCore\Core\ModuleInterface;
+use nCore\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;

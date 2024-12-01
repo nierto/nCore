@@ -1,15 +1,15 @@
 <?php
 /**
- * NiertoCube Module Interface
+ * nCore Module Interface
  * 
- * Defines the contract that all NiertoCube modules must implement.
+ * Defines the contract that all nCore modules must implement.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Core
  * @version     2.0.0
  */
 
-namespace NiertoCube\Core;
+namespace nCore\Core;
 
 interface ModuleInterface {
     /**

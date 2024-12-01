@@ -1,4 +1,4 @@
-# BEGIN NiertoCube
+# BEGIN nCore
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase {{SITE_PATH}}
@@ -96,4 +96,4 @@ AddDefaultCharset UTF-8
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/xml
 </IfModule>
-# END NiertoCube
+# END nCore

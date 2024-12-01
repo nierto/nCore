@@ -1,5 +1,5 @@
 <?php
-namespace NiertoCube\Cache;
+namespace nCore\Cache;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 /**
  * TransientStrategy - WordPress transient-based caching implementation
  * 
- * @package NiertoCube
+ * @package nCore
  * @subpackage Cache
  * @since 1.0.0
  */
@@ -34,7 +34,7 @@ class TransientStrategy implements CacheStrategyInterface {
      */
     public function __construct(array $config = []) {
         $this->config = array_merge([
-            'prefix' => 'nierto_cube_',
+            'prefix' => 'nCore_',
             'default_ttl' => HOUR_IN_SECONDS,
             'max_ttl' => WEEK_IN_SECONDS,
             'min_ttl' => MINUTE_IN_SECONDS,
@@ -312,7 +312,7 @@ class TransientStrategy implements CacheStrategyInterface {
      */
     private function logError(string $message): void {
         if ($this->debug) {
-            error_log("NiertoCube TransientStrategy Error: {$message}");
+            error_log("nCore TransientStrategy Error: {$message}");
         }
         $this->metrics['errors']++;
     }

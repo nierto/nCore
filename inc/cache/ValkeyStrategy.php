@@ -1,5 +1,5 @@
 <?php
-namespace NiertoCube\Cache;
+namespace nCore\Cache;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -8,7 +8,7 @@ if (!defined('ABSPATH')) {
 /**
  * ValKey Strategy - Implements caching strategy using ValKey
  * 
- * @package NiertoCube
+ * @package nCore
  * @subpackage Cache
  * @since 1.0.0
  */
@@ -41,7 +41,7 @@ class ValKeyStrategy implements CacheStrategyInterface {
      * @return array Configuration settings
      */
     private function loadConfig(): array {
-        $settings = get_option('nierto_cube_settings', []);
+        $settings = get_option('nCore_settings', []);
         return [
             'enabled' => !empty($settings['use_valkey']),
             'host' => $settings['valkey_ip'] ?? '127.0.0.1',

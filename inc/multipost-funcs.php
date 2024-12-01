@@ -1,12 +1,12 @@
 <?php
 /**
- * NiertoCube Multi-Post Functions
+ * nCore Multi-Post Functions
  * -----------------------------------------
  * 
- * This file manages the multi-post functionality for the NiertoCube theme, specifically
+ * This file manages the multi-post functionality for the nCore theme, specifically
  * handling the enforcement of single settings template instances across cube faces.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Core
  * @version     1.0.0
  * @since       1.0.0
@@ -80,7 +80,7 @@
  * // Template status is enforced through WordPress hooks
  * 
  * @author     Niels Erik Toren
- * @copyright  2024 NiertoCube
+ * @copyright  2024 nCore
  * @license    See project license file
  */
 

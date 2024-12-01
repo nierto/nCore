@@ -5,14 +5,14 @@
  * Handles theme installation, updates, file management, warranty tracking,
  * and deployment scenarios. Provides integrity verification and state management.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules
  * @version     2.1.0
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
+use nCore\Core\ModuleInterface;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -98,7 +98,7 @@ class InstallManager implements ModuleInterface {
     private const HASH_SYNC = [
         'endpoint' => 'https://nierto.com/api/v1/integrity',
         'retry_delay' => 3600,
-        'cache_key' => 'nierto_cube_hash_registry'
+        'cache_key' => 'nCore_hash_registry'
     ];
 
     /**
@@ -133,7 +133,7 @@ class InstallManager implements ModuleInterface {
                 'backup_dir' => WP_CONTENT_DIR . '/backups/nierto-cube',
                 'theme_dir' => get_template_directory(),
                 'wp_root' => ABSPATH,
-                'debug' => get_theme_mod('nierto_cube_debug_mode', WP_DEBUG),
+                'debug' => get_theme_mod('nCore_debug_mode', WP_DEBUG),
                 'deployment' => [
                     'auto_deploy' => false,
                     'git_integration' => false,
@@ -205,9 +205,9 @@ class InstallManager implements ModuleInterface {
         add_action('admin_notices', [$this, 'displayInstallationNotices']);
 
         // Integrity hooks
-        add_action('nierto_cube_daily_sync', [$this, 'syncHashRegistry']);
-        if (!wp_next_scheduled('nierto_cube_daily_sync')) {
-            wp_schedule_event(time(), 'daily', 'nierto_cube_daily_sync');
+        add_action('nCore_daily_sync', [$this, 'syncHashRegistry']);
+        if (!wp_next_scheduled('nCore_daily_sync')) {
+            wp_schedule_event(time(), 'daily', 'nCore_daily_sync');
         }
     }
 
@@ -216,14 +216,14 @@ class InstallManager implements ModuleInterface {
      */
     private function initializeIntegrityChecking(): void {
         // Load existing integrity status
-        $saved_status = get_option('nierto_cube_integrity_check', []);
+        $saved_status = get_option('nCore_integrity_check', []);
         if ($saved_status) {
             $this->integrity_status = $saved_status;
         }
 
         // Load warranty status
         $this->warranty_status = get_option(
-            'nierto_cube_warranty_status',
+            'nCore_warranty_status',
             self::WARRANTY_STATUS['unverified']
         );
 
@@ -282,7 +282,7 @@ class InstallManager implements ModuleInterface {
             $this->releaseInstallationLock();
 
             // Trigger post-installation hooks
-            do_action('nierto_cube_after_install', $this->getInstallationReport());
+            do_action('nCore_after_install', $this->getInstallationReport());
 
         } catch (\Exception $e) {
             $this->handleInstallationFailure($e);
@@ -308,7 +308,7 @@ class InstallManager implements ModuleInterface {
                 );
 
                 // Set directory metadata
-                update_option("nierto_cube_dir_{$dir}", [
+                update_option("nCore_dir_{$dir}", [
                     'purpose' => $purpose,
                     'created' => time(),
                     'permissions' => $this->config['permissions']['directories']
@@ -392,14 +392,14 @@ class InstallManager implements ModuleInterface {
      * Update installation progress with state tracking
      */
     private function updateInstallationProgress(string $stage, array $data = []): void {
-        $progress = get_option('nierto_cube_install_progress', []);
+        $progress = get_option('nCore_install_progress', []);
         
         $progress[$stage] = array_merge([
             'timestamp' => time(),
             'status' => 'completed'
         ], $data);
 
-        update_option('nierto_cube_install_progress', $progress);
+        update_option('nCore_install_progress', $progress);
 
         // Record progress metric
         $this->metrics->recordMetric('installation_progress', [
@@ -443,11 +443,11 @@ class InstallManager implements ModuleInterface {
      */
     private function setupInitialOptions(): void {
         $options = [
-            'nierto_cube_version' => $this->config['version'],
-            'nierto_cube_install_date' => time(),
-            'nierto_cube_environment' => $this->config['deployment']['environment'],
-            'nierto_cube_auto_recovery' => true,
-            'nierto_cube_debug_mode' => $this->config['debug']
+            'nCore_version' => $this->config['version'],
+            'nCore_install_date' => time(),
+            'nCore_environment' => $this->config['deployment']['environment'],
+            'nCore_auto_recovery' => true,
+            'nCore_debug_mode' => $this->config['debug']
         ];
 
         foreach ($options as $key => $value) {
@@ -530,7 +530,7 @@ class InstallManager implements ModuleInterface {
             $this->logDebug('Starting hash registry sync');
 
             // Get current theme version
-            $version = get_option('nierto_cube_version', '1.0.0');
+            $version = get_option('nCore_version', '1.0.0');
             
             // Get metrics report for sync
             $metrics_report = $this->metrics->generateIntegrityReport();
@@ -583,7 +583,7 @@ class InstallManager implements ModuleInterface {
             );
 
             // Update last sync timestamp
-            update_option('nierto_cube_last_hash_sync', time());
+            update_option('nCore_last_hash_sync', time());
 
             $this->logDebug('Hash registry synchronized successfully');
             return true;
@@ -594,7 +594,7 @@ class InstallManager implements ModuleInterface {
             // Schedule retry
             wp_schedule_single_event(
                 time() + self::HASH_SYNC['retry_delay'],
-                'nierto_cube_retry_hash_sync'
+                'nCore_retry_hash_sync'
             );
             
             return false;
@@ -636,7 +636,7 @@ class InstallManager implements ModuleInterface {
     private function updateWarrantyStatus(string $status = null): void {
         if ($status !== null) {
             $this->warranty_status = $status;
-            update_option('nierto_cube_warranty_status', $status);
+            update_option('nCore_warranty_status', $status);
             return;
         }
 
@@ -655,7 +655,7 @@ class InstallManager implements ModuleInterface {
             }
         }
 
-        update_option('nierto_cube_warranty_status', $this->warranty_status);
+        update_option('nCore_warranty_status', $this->warranty_status);
 
         // Record warranty change
         $this->metrics->recordMetric('warranty_status', [
@@ -721,7 +721,7 @@ class InstallManager implements ModuleInterface {
             'last_check' => time()
         ]);
 
-        update_option('nierto_cube_integrity_check', $results);
+        update_option('nCore_integrity_check', $results);
         
         // Notify admin if issues found
         if (!$this->integrity_status['status']) {
@@ -756,7 +756,7 @@ class InstallManager implements ModuleInterface {
         if ($this->config['notify_admin']) {
             wp_mail(
                 get_option('admin_email'),
-                'NiertoCube Integrity Alert',
+                'nCore Integrity Alert',
                 $message
             );
         }
@@ -980,8 +980,8 @@ class InstallManager implements ModuleInterface {
      */
     private function getInstallationReport(): array {
         return [
-            'version' => get_option('nierto_cube_version'),
-            'install_date' => get_option('nierto_cube_install_date'),
+            'version' => get_option('nCore_version'),
+            'install_date' => get_option('nCore_install_date'),
             'environment' => $this->config['deployment']['environment'],
             'state' => $this->getInstallationState(),
             'warranty_status' => $this->warranty_status,

@@ -1,4 +1,4 @@
-NiertoCube License
+nCore License
 ==================
 
 Copyright (c) 2024, by Niels Erik Toren

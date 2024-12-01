@@ -1,18 +1,18 @@
 <?php
 /**
- * NiertoCube Error Management System
+ * nCore Error Management System
  * 
  * Provides comprehensive error handling, logging, and reporting functionality for
- * the NiertoCube theme. This is a critical system component that other modules
+ * the nCore theme. This is a critical system component that other modules
  * depend on for error management and reporting.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules
  * @since       2.0.0
  * 
  * Architecture & Integration:
  * -------------------------
- * - Implements ModuleInterface for NiertoCube core integration
+ * - Implements ModuleInterface for nCore core integration
  * - Uses singleton pattern for global error handling
  * - Provides PSR-3 compliant logging interface
  * - Integrates with WordPress error handling
@@ -54,9 +54,9 @@
  * @version   2.0.0
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
+use nCore\Core\ModuleInterface;
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
@@ -143,7 +143,7 @@ class ErrorManager implements ModuleInterface {
                 'notify_admin' => true,
                 'error_categories' => array_values(self::ERROR_CATEGORIES),
                 'admin_capability' => 'manage_options',
-                'option_name' => 'nierto_cube_error_log',
+                'option_name' => 'nCore_error_log',
                 'email_critical' => true,
                 'email_threshold' => self::SEVERITY_LEVELS['CRITICAL'],
                 'compression_level' => 9,
@@ -174,7 +174,7 @@ class ErrorManager implements ModuleInterface {
         add_action('customize_register', [$this, 'registerCustomizerSettings']);
         add_action('admin_notices', [$this, 'displayErrorNotifications']);
         add_action('shutdown', [$this, 'processErrorQueue'], 999);
-        add_action('wp_ajax_nierto_cube_dismiss_error', [$this, 'dismissError']);
+        add_action('wp_ajax_nCore_dismiss_error', [$this, 'dismissError']);
     }
 
     /**
@@ -292,7 +292,7 @@ class ErrorManager implements ModuleInterface {
         $formatted_entry = $this->formatLogEntry($error);
 
         if (!error_log($formatted_entry . PHP_EOL, 3, $log_file)) {
-            error_log('NiertoCube ErrorManager: Failed to write to log file');
+            error_log('nCore ErrorManager: Failed to write to log file');
         }
     }
 
@@ -344,9 +344,9 @@ class ErrorManager implements ModuleInterface {
             'timestamp' => time()
         ];
 
-        $notifications = get_option('nierto_cube_error_notifications', []);
+        $notifications = get_option('nCore_error_notifications', []);
         $notifications[] = $notification;
-        update_option('nierto_cube_error_notifications', $notifications);
+        update_option('nCore_error_notifications', $notifications);
     }
 
     /**
@@ -501,7 +501,7 @@ Stack Trace:
             return;
         }
 
-        $notifications = get_option('nierto_cube_error_notifications', []);
+        $notifications = get_option('nCore_error_notifications', []);
         foreach ($notifications as $index => $notification) {
             printf(
                 '<div class="notice notice-%s %s"><p>%s</p>%s</div>',
@@ -520,7 +520,7 @@ Stack Trace:
      * Dismiss error notification
      */
     public function dismissError(): void {
-        check_ajax_referer('nierto_cube_error_dismiss', 'nonce');
+        check_ajax_referer('nCore_error_dismiss', 'nonce');
         
         if (!current_user_can($this->config['admin_capability'])) {
             wp_send_json_error('Insufficient permissions');
@@ -528,11 +528,11 @@ Stack Trace:
         }
 
         $notice_id = intval($_POST['notice_id']);
-        $notifications = get_option('nierto_cube_error_notifications', []);
+        $notifications = get_option('nCore_error_notifications', []);
         
         if (isset($notifications[$notice_id])) {
             unset($notifications[$notice_id]);
-            update_option('nierto_cube_error_notifications', $notifications);
+            update_option('nCore_error_notifications', $notifications);
             wp_send_json_success('Notice dismissed');
         } else {
             wp_send_json_error('Invalid notice ID');

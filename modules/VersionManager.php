@@ -3,7 +3,7 @@
 /**
  * VersionManager - Advanced Version Control and Cache Invalidation System
  * 
- * Provides comprehensive version tracking and cache invalidation functionality for the NiertoCube theme.
+ * Provides comprehensive version tracking and cache invalidation functionality for the nCore theme.
  * Implements ModuleInterface for standardized integration with the nCore system while maintaining
  * backward compatibility with existing version control mechanisms.
  * 
@@ -52,9 +52,9 @@
  * HOOKS & FILTERS
  * -------------
  * Actions:
- * - 'nierto_cube_cache_version_incremented' - When single version incremented
- * - 'nierto_cube_cache_all_versions_incremented' - When all versions incremented
- * - 'nierto_cube_cache_group_registered' - When new group registered
+ * - 'nCore_cache_version_incremented' - When single version incremented
+ * - 'nCore_cache_all_versions_incremented' - When all versions incremented
+ * - 'nCore_cache_group_registered' - When new group registered
  * 
  * Integration Points:
  * - 'switch_theme' - Triggers version increment
@@ -80,7 +80,7 @@
  * Default settings:
  * ```php
  * [
- *     'version_prefix' => 'nierto_cube_',
+ *     'version_prefix' => 'nCore_',
  *     'auto_increment' => true,
  *     'store_history' => false,
  *     'debug' => WP_DEBUG,
@@ -130,16 +130,16 @@
  * - Requires manual group registration
  * - Database reads on initialization
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules
  * @implements  ModuleInterface
  * @since       2.0.0
  * @author      Niels Erik Toren
- * @copyright   2024 NiertoCube
+ * @copyright   2024 nCore
  * @version     2.0.0
  * 
- * @see \NiertoCube\Core\ModuleInterface
- * @see \NiertoCube\Core\nCore
+ * @see \nCore\Core\ModuleInterface
+ * @see \nCore\Core\nCore
  * 
  * @method static VersionManager getInstance()     Get singleton instance
  * @method void initialize(array $config = [])    Initialize the module
@@ -148,10 +148,10 @@
  * @method bool isInitialized()                   Check initialization status
  * @method array getStatus()                      Get module status
  */
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\nCore;
+use nCore\Core\ModuleInterface;
+use nCore\Core\nCore;
 
 class VersionManager implements ModuleInterface {
     /** @var VersionManager Singleton instance */
@@ -167,7 +167,7 @@ class VersionManager implements ModuleInterface {
     private $config = [];
 
     /** @var string Option name for storing versions */
-    private const VERSION_OPTION = 'nierto_cube_cache_versions';
+    private const VERSION_OPTION = 'nCore_cache_versions';
 
     /** @var array Default versions for core groups */
     private const DEFAULT_GROUPS = [
@@ -179,7 +179,7 @@ class VersionManager implements ModuleInterface {
 
     /** @var array Default configuration */
     private const DEFAULT_CONFIG = [
-        'version_prefix' => 'nierto_cube_',
+        'version_prefix' => 'nCore_',
         'auto_increment' => true,
         'store_history' => false,
         'debug' => WP_DEBUG,
@@ -269,7 +269,7 @@ class VersionManager implements ModuleInterface {
         $this->versions[$group]++;
         $this->saveVersions();
 
-        do_action('nierto_cube_cache_version_incremented', $group, $this->versions[$group]);
+        do_action('nCore_cache_version_incremented', $group, $this->versions[$group]);
 
         return $this->versions[$group];
     }
@@ -282,7 +282,7 @@ class VersionManager implements ModuleInterface {
             $this->incrementVersion($group);
         }
 
-        do_action('nierto_cube_cache_all_versions_incremented', $this->versions);
+        do_action('nCore_cache_all_versions_incremented', $this->versions);
     }
 
     /**
@@ -300,7 +300,7 @@ class VersionManager implements ModuleInterface {
         $this->versions[$group] = $initial_version;
         $this->saveVersions();
 
-        do_action('nierto_cube_cache_group_registered', $group, $initial_version);
+        do_action('nCore_cache_group_registered', $group, $initial_version);
 
         return true;
     }
@@ -406,14 +406,14 @@ class VersionManager implements ModuleInterface {
 }
 
 // Backward compatibility functions
-if (!function_exists('nierto_cube_get_cache_version')) {
-    function nierto_cube_get_cache_version() {
+if (!function_exists('nCore_get_cache_version')) {
+    function nCore_get_cache_version() {
         return VersionManager::getInstance()->getVersion();
     }
 }
 
-if (!function_exists('nierto_cube_increment_cache_version')) {
-    function nierto_cube_increment_cache_version() {
+if (!function_exists('nCore_increment_cache_version')) {
+    function nCore_increment_cache_version() {
         return VersionManager::getInstance()->incrementVersion();
     }
 }

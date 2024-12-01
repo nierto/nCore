@@ -3,7 +3,7 @@
 /**
  * Template for cookie consent banner
  * 
- * @package NiertoCube
+ * @package nCore
  * @subpackage Privacy
  * @version 2.0.0
  */

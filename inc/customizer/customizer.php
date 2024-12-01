@@ -1,11 +1,11 @@
 <?php
 /**
- * CustomizerManager - WordPress Customizer Integration for NiertoCube
+ * CustomizerManager - WordPress Customizer Integration for nCore
  * 
  * Manages all customizer functionality including registration, preview handling,
  * and real-time updates. Implements ModuleInterface for nCore integration.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Customizer
  * @version     2.0.0
  * 
@@ -36,10 +36,10 @@
  * @since     2.0.0
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\nCore;
+use nCore\Core\ModuleInterface;
+use nCore\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -166,7 +166,7 @@ class CustomizerManager implements ModuleInterface {
      */
     public function registerCustomizerSettings($wp_customize): void {
         foreach ($this->sections as $section_id => $section) {
-            $wp_customize->add_section("nierto_cube_{$section_id}", [
+            $wp_customize->add_section("nCore_{$section_id}", [
                 'title' => $section['title'],
                 'priority' => $section['priority']
             ]);
@@ -213,7 +213,7 @@ class CustomizerManager implements ModuleInterface {
     private function getControlArgs($setting_id, $section_id): array {
         $args = [
             'label' => $this->getSettingLabel($setting_id),
-            'section' => "nierto_cube_{$section_id}"
+            'section' => "nCore_{$section_id}"
         ];
 
         if (strpos($setting_id, 'dimension') !== false) {
@@ -305,10 +305,10 @@ class CustomizerManager implements ModuleInterface {
             true
         );
 
-        wp_localize_script('nierto-cube-customizer-preview', 'niertoCubeCustomizer', [
+        wp_localize_script('nierto-cube-customizer-preview', 'nCoreCustomizer', [
             'settings' => $this->getCustomizerSettings(),
             'sections' => array_keys($this->sections),
-            'nonce' => wp_create_nonce('nierto_cube_customizer')
+            'nonce' => wp_create_nonce('nCore_customizer')
         ]);
     }
 
@@ -321,7 +321,7 @@ class CustomizerManager implements ModuleInterface {
             $cache->flush('customizer');
         }
 
-        do_action('nierto_cube_customizer_saved');
+        do_action('nCore_customizer_saved');
     }
 
     /**

@@ -1,12 +1,12 @@
 <?php
 /**
- * Structured Data Implementation for NiertoCube Theme
+ * Structured Data Implementation for nCore Theme
  * 
  * This file handles the generation and integration of structured data (Schema.org)
  * markup for improved SEO and machine readability of content, particularly
  * focusing on cube face content representation.
  * 
- * @package NiertoCube
+ * @package nCore
  * @subpackage SEO
  * @since 1.0.0
  * 
@@ -22,7 +22,7 @@
  * 
  * Key Functions:
  * -------------
- * - nierto_cube_generate_structured_data(): 
+ * - nCore_generate_structured_data(): 
  *   Generates JSON-LD structured data based on current content context
  *   Input: None (uses global $post)
  *   Output: JSON-LD structured data string or empty string if not applicable
@@ -87,7 +87,7 @@
  * Usage Example:
  * ------------
  * // Output structured data in header or footer
- * $structured_data = nierto_cube_generate_structured_data();
+ * $structured_data = nCore_generate_structured_data();
  * if (!empty($structured_data)) {
  *     echo '<script type="application/ld+json">';
  *     echo $structured_data;
@@ -100,7 +100,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function nierto_cube_generate_structured_data() {
+function nCore_generate_structured_data() {
     global $post;
 
     if (is_singular()) {

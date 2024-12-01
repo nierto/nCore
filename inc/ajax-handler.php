@@ -1,8 +1,8 @@
 <?php
 /**
- * Ajax Handler for NiertoCube Theme
+ * Ajax Handler for nCore Theme
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  AJAX
  * @version     1.0.0
  * @since       1.0.0
@@ -10,7 +10,7 @@
  * 
  * FUNCTIONALITY OVERVIEW
  * ======================
- * Manages all AJAX operations for the NiertoCube theme, including face content loading,
+ * Manages all AJAX operations for the nCore theme, including face content loading,
  * cache management, and dynamic content updates. Implements security measures and
  * error handling for all AJAX endpoints.
  * 
@@ -23,21 +23,21 @@
  * 
  * PRIMARY FUNCTIONS
  * ================
- * nierto_cube_verify_ajax_nonce()
+ * nCore_verify_ajax_nonce()
  *     Validates AJAX requests using WordPress nonces
  * 
- * nierto_cube_ajax_handler()
+ * nCore_ajax_handler()
  *     Central handler for all AJAX operations
  *     Processes: face content, cache operations
  * 
- * nierto_cube_ajax_error_handler()
+ * nCore_ajax_error_handler()
  *     Custom error handling for AJAX operations
  *     Logs errors and manages graceful degradation
  * 
- * nierto_cube_ajax_wrapper()
+ * nCore_ajax_wrapper()
  *     Wraps AJAX callbacks with error handling and response formatting
  * 
- * nierto_cube_get_face_content_ajax()
+ * nCore_get_face_content_ajax()
  *     Retrieves and processes cube face content
  *     Handles caching and template processing
  * 
@@ -96,7 +96,7 @@
  * DEPRECATION NOTICES
  * ==================
  * - direct_face_content_fetch() is deprecated since 1.1.0
- *   Use nierto_cube_get_face_content_ajax() instead
+ *   Use nCore_get_face_content_ajax() instead
  * 
  * CHANGELOG
  * =========
@@ -109,9 +109,9 @@
  * =============
  * WordPress AJAX call:
  * ```javascript
- * wp.ajax.post('nierto_cube_ajax', {
+ * wp.ajax.post('nCore_ajax', {
  *     action: 'get_face_content',
- *     nonce: niertoCubeData.nonce,
+ *     nonce: nCoreData.nonce,
  *     face_id: 1
  * }).done(function(response) {
  *     // Handle response
@@ -124,15 +124,15 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function nierto_cube_verify_ajax_nonce() {
-    if (!check_ajax_referer('nierto_cube_ajax', 'nonce', false)) {
+function nCore_verify_ajax_nonce() {
+    if (!check_ajax_referer('nCore_ajax', 'nonce', false)) {
         wp_send_json_error(['message' => 'Nonce verification failed']);
         exit;
     }
 }
 
-function nierto_cube_ajax_handler() {
-    nierto_cube_verify_ajax_nonce();
+function nCore_ajax_handler() {
+    nCore_verify_ajax_nonce();
 
     $action = isset($_POST['cube_action']) ? sanitize_text_field($_POST['cube_action']) : '';
 
@@ -153,20 +153,20 @@ function nierto_cube_ajax_handler() {
     }
 }
 
-function nierto_cube_ajax_error_handler($errno, $errstr, $errfile, $errline) {
-    nierto_cube_log_error("AJAX Error: $errstr in $errfile on line $errline");
+function nCore_ajax_error_handler($errno, $errstr, $errfile, $errline) {
+    nCore_log_error("AJAX Error: $errstr in $errfile on line $errline");
     return true; // Don't execute the PHP internal error handler
 }
 
-function nierto_cube_ajax_wrapper($callback) {
+function nCore_ajax_wrapper($callback) {
     return function() use ($callback) {
         try {
-            set_error_handler('nierto_cube_ajax_error_handler');
+            set_error_handler('nCore_ajax_error_handler');
             $result = call_user_func($callback);
             restore_error_handler();
             wp_send_json_success($result);
         } catch (Exception $e) {
-            nierto_cube_log_error('AJAX Exception: ' . $e->getMessage(), [
+            nCore_log_error('AJAX Exception: ' . $e->getMessage(), [
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString()
@@ -176,8 +176,8 @@ function nierto_cube_ajax_wrapper($callback) {
     };
 }
 
-function nierto_cube_get_face_content_ajax() {
-    nierto_cube_verify_ajax_nonce();
+function nCore_get_face_content_ajax() {
+    nCore_verify_ajax_nonce();
     $slug = sanitize_text_field($_POST['slug']);
     $post_type = sanitize_text_field($_POST['post_type']);
     $args = array(
@@ -207,16 +207,16 @@ function nierto_cube_get_face_content_ajax() {
     }
 }
 
-function nierto_cube_get_theme_url() {
+function nCore_get_theme_url() {
     wp_send_json(array(
         'theme_url' => get_template_directory_uri() . '/',
-        'nonce' => wp_create_nonce('nierto_cube_sw_cache')
+        'nonce' => wp_create_nonce('nCore_sw_cache')
     ));
 }
 
-add_action('wp_ajax_nierto_cube_ajax', nierto_cube_ajax_wrapper('nierto_cube_ajax_handler'));
-add_action('wp_ajax_nopriv_nierto_cube_ajax', nierto_cube_ajax_wrapper('nierto_cube_ajax_handler'));
-add_action('wp_ajax_nierto_cube_get_face_content', nierto_cube_ajax_wrapper('nierto_cube_get_face_content_ajax'));
-add_action('wp_ajax_nopriv_nierto_cube_get_face_content', nierto_cube_ajax_wrapper('nierto_cube_get_face_content_ajax'));
-add_action('wp_ajax_get_theme_url', nierto_cube_ajax_wrapper('nierto_cube_get_theme_url'));
-add_action('wp_ajax_nopriv_get_theme_url', nierto_cube_ajax_wrapper('nierto_cube_get_theme_url'));
+add_action('wp_ajax_nCore_ajax', nCore_ajax_wrapper('nCore_ajax_handler'));
+add_action('wp_ajax_nopriv_nCore_ajax', nCore_ajax_wrapper('nCore_ajax_handler'));
+add_action('wp_ajax_nCore_get_face_content', nCore_ajax_wrapper('nCore_get_face_content_ajax'));
+add_action('wp_ajax_nopriv_nCore_get_face_content', nCore_ajax_wrapper('nCore_get_face_content_ajax'));
+add_action('wp_ajax_get_theme_url', nCore_ajax_wrapper('nCore_get_theme_url'));
+add_action('wp_ajax_nopriv_get_theme_url', nCore_ajax_wrapper('nCore_get_theme_url'));

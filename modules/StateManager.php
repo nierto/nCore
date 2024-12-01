@@ -3,7 +3,7 @@
  * StateManager - Advanced State Management System
  * 
  * Provides centralized state management with real-time synchronization,
- * history tracking, and performance optimization for the NiertoCube theme.
+ * history tracking, and performance optimization for the nCore theme.
  * 
  * Architectural Principles:
  * - Immutable state transitions
@@ -11,19 +11,19 @@
  * - Transactional integrity
  * - History-aware operations
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules\Level2
  * @version     2.0.0
  * @since       2.0.0
  */
 
-namespace NiertoCube\Modules;  
+namespace nCore\Modules;  
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Cache\CacheStrategyInterface;
-use NiertoCube\Modules\ErrorManager;
-use NiertoCube\Modules\ResourceManager;
-use NiertoCube\Modules\CacheManager;
+use nCore\Core\ModuleInterface;
+use nCore\Cache\CacheStrategyInterface;
+use nCore\Modules\ErrorManager;
+use nCore\Modules\ResourceManager;
+use nCore\Modules\CacheManager;
 
 class StateManager implements ModuleInterface, \ArrayAccess {
     /** @var StateManager Singleton instance */
@@ -91,7 +91,7 @@ class StateManager implements ModuleInterface, \ArrayAccess {
     private function initializeCore(): void {
         try {
             // Get nCore instance
-            $core = \NiertoCube\Core\nCore::getInstance();
+            $core = \nCore\Core\nCore::getInstance();
 
             // Initialize Error Manager (Level 0 dependency)
             $this->errorManager = $core->getModule('Error');

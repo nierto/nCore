@@ -1,12 +1,12 @@
 <?php
 /**
- * Optimization Management System for NiertoCube Theme
+ * Optimization Management System for nCore Theme
  * 
  * Handles performance optimization, resource management, and asset optimization
- * for the NiertoCube theme. This module focuses purely on optimization strategies
+ * for the nCore theme. This module focuses purely on optimization strategies
  * with metrics collection handled separately by MetricsManager.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules
  * @version     2.0.0
  * @since       2.0.0
@@ -30,13 +30,13 @@
  *    - Late: Post-init cleanup
  * 
  * @author    Niels Erik Toren
- * @copyright 2024 NiertoCube
+ * @copyright 2024 nCore
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\nCore;
+use nCore\Core\ModuleInterface;
+use nCore\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -53,7 +53,7 @@ class OptimizationManager implements ModuleInterface {
     /** @var array Configuration settings */
     private $config = [];
     
-    /** @var \NiertoCube\Modules\MetricsManager|null */
+    /** @var \nCore\Modules\MetricsManager|null */
     private $metrics = null;
 
     /** @var array Default configuration values */

@@ -2,14 +2,14 @@
 /**
  * Google Fonts Integration Functions
  * 
- * @package NiertoCube
+ * @package nCore
  * @subpackage Font_Management
  * @version 1.0.0
  * 
  * ----------------------------------------------------------------------------
  * DESCRIPTION
  * ----------------------------------------------------------------------------
- * Manages Google Fonts integration for the NiertoCube theme, handling font loading,
+ * Manages Google Fonts integration for the nCore theme, handling font loading,
  * family management, and CSS variable generation. Provides flexible font source
  * switching between Google Fonts and local system fonts.
  * 
@@ -26,7 +26,7 @@
  *     - Supports both Google and local font sources
  *     - Handles fallback font configurations
  * 
- * nierto_cube_output_font_css_variables()
+ * nCore_output_font_css_variables()
  *     - Outputs CSS variables for font families
  *     - Enables consistent font usage across theme styles
  *     - Hooked to wp_head with priority 5
@@ -132,7 +132,7 @@ function get_font_family($setting) {
     }
 }
 // Output font CSS variables for use in other stylesheets
-function nierto_cube_output_font_css_variables() {
+function nCore_output_font_css_variables() {
     ?>
     <style>
         :root {
@@ -141,4 +141,4 @@ function nierto_cube_output_font_css_variables() {
     </style>
     <?php
 }
-add_action('wp_head', 'nierto_cube_output_font_css_variables', 5);
+add_action('wp_head', 'nCore_output_font_css_variables', 5);

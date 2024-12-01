@@ -2,15 +2,15 @@
 /**
  * Advanced OptimizationManager Extensions
  * 
- * Additional optimization techniques for the NiertoCube theme that address often
+ * Additional optimization techniques for the nCore theme that address often
  * overlooked performance opportunities.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules
  * @since       2.0.0
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
 trait AdvancedOptimizations {
     /**

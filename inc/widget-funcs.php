@@ -1,25 +1,25 @@
 <?php
 /**
- * Widget Management System for NiertoCube Theme
+ * Widget Management System for nCore Theme
  * ============================================
  * 
  * A lightweight widget registration and management system specifically designed
- * for the NiertoCube theme's custom cube face functionality.
+ * for the nCore theme's custom cube face functionality.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Widgets
  * @since       1.0.0
  * 
  * File Purpose:
  * -------------
  * Handles the registration and initialization of widget areas specifically for
- * cube faces in the NiertoCube theme. Currently manages a single sidebar area
+ * cube faces in the nCore theme. Currently manages a single sidebar area
  * that can be displayed across all cube faces, providing consistent widget
  * functionality throughout the 3D interface.
  * 
  * Key Functions:
  * -------------
- * - nierto_cube_widgets_init()
+ * - nCore_widgets_init()
  *   Registers the cube face sidebar widget area with WordPress
  *   Called on 'widgets_init' hook
  *   Sets up widget container markup and styling
@@ -79,15 +79,15 @@
  * - No redundant database queries
  * 
  * @author     Niels Erik Toren
- * @copyright  2024 NiertoCube
- * @license    NiertoCube License
+ * @copyright  2024 nCore
+ * @license    nCore License
  */
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
     exit;
 }
 
-function nierto_cube_widgets_init() {
+function nCore_widgets_init() {
     register_sidebar( array(
         'name'          => __( 'Cube Face Sidebar', 'nierto_cube' ),
         'id'            => 'cube-face-sidebar',
@@ -98,4 +98,4 @@ function nierto_cube_widgets_init() {
         'after_title'   => '</h2>',
     ) );
 }
-add_action( 'widgets_init', 'nierto_cube_widgets_init' );
+add_action( 'widgets_init', 'nCore_widgets_init' );

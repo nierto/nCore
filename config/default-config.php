@@ -1,15 +1,15 @@
 <?php
 /**
- * NiertoCube Default Configuration
+ * nCore Default Configuration
  * 
- * Default configuration settings for all NiertoCube modules.
+ * Default configuration settings for all nCore modules.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Config
  * @version     2.0.0
  */
 
-namespace NiertoCube\Config;
+namespace nCore\Config;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -34,7 +34,7 @@ return [
         'cache' => [
             'enabled' => true,
             'driver' => 'valkey',
-            'prefix' => 'nierto_cube_',
+            'prefix' => 'nCore_',
             'ttl' => HOUR_IN_SECONDS,
             'groups' => [
                 'core' => ['ttl' => HOUR_IN_SECONDS],

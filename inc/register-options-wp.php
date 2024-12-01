@@ -4,10 +4,10 @@
  * =====================================================
  *
  * This file manages the registration and configuration of all WordPress Customizer
- * options for the NiertoCube theme. It handles color schemes, cube settings,
+ * options for the nCore theme. It handles color schemes, cube settings,
  * navigation styling, PWA configurations, ValKey integration, and more.
  *
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Customizer
  * @since       1.0.0
  * 
@@ -20,7 +20,7 @@
  *
  * Key Functions
  * ------------
- * nierto_cube_customize_register($wp_customize)
+ * nCore_customize_register($wp_customize)
  *   - Main registration function for all customizer options
  *   - Organizes settings into logical sections
  *   - Handles control type assignment and validation
@@ -109,7 +109,7 @@
  * 5. Add unit tests for settings validation
  *
  * @author    Niels Erik Toren
- * @copyright 2024 NiertoCube
+ * @copyright 2024 nCore
  * @license   See project root for license information
  */
 
@@ -120,7 +120,7 @@ if (!defined('ABSPATH')) {
 }
 
 
-function nierto_cube_customize_register($wp_customize) {
+function nCore_customize_register($wp_customize) {
     // Registering sections
     // COLORS SECTION
     $wp_customize->add_section('colors', array(
@@ -129,12 +129,12 @@ function nierto_cube_customize_register($wp_customize) {
         'priority' => 23,
     ));
     // VALKEY INTEGRATION SECTION
-    $wp_customize->add_section('nierto_cube_valkey', array(
+    $wp_customize->add_section('nCore_valkey', array(
     'title' => __('ValKey Settings', 'nierto_cube'),
     'priority' => 29,
     ));
     // PWA INTEGRATION SECTION
-    $wp_customize->add_section('nierto_cube_pwa', array(
+    $wp_customize->add_section('nCore_pwa', array(
     'title' => __('PWA Settings', 'nierto_cube'),
     'priority' => 35,
     ));
@@ -163,7 +163,7 @@ function nierto_cube_customize_register($wp_customize) {
         'priority' => 203,
     ));
     // ZOOM functionality of main content area (also called: Content Expansion Options) SECTION
-    $wp_customize->add_section('nierto_cube_content_options', array(
+    $wp_customize->add_section('nCore_content_options', array(
         'title' => __('Content Expansion Options', 'nierto_cube'),
         'priority' => 300,
     ));
@@ -174,7 +174,7 @@ function nierto_cube_customize_register($wp_customize) {
         $wp_customize->add_setting("grad_color{$num}", array(
             'default' => '#ee7752',
             'transport' => 'refresh',
-            'sanitize_callback' => 'nierto_cube_sanitize_hex_color'
+            'sanitize_callback' => 'nCore_sanitize_hex_color'
         ));
         $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, "grad_color{$num}", array(
             'label' => __("Gradient Color {$num}", 'nierto_cube'),
@@ -204,7 +204,7 @@ function nierto_cube_customize_register($wp_customize) {
         $wp_customize->add_setting($setting_id, [
             'default' => $default,
             'transport' => 'refresh',
-            'sanitize_callback' => 'nierto_cube_sanitize_hex_color'
+            'sanitize_callback' => 'nCore_sanitize_hex_color'
         ]);
         $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, $setting_id, array(
             'label' => __(ucfirst(str_replace('_', ' ', $setting_id)), 'nierto_cube'),
@@ -219,7 +219,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control('use_valkey', array(
         'label' => __('Use ValKey', 'nierto_cube'),
-        'section' => 'nierto_cube_valkey',
+        'section' => 'nCore_valkey',
         'type' => 'checkbox',
     ));
     $wp_customize->add_setting('valkey_ip', array(
@@ -228,7 +228,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control('valkey_ip', array(
         'label' => __('ValKey IP Address', 'nierto_cube'),
-        'section' => 'nierto_cube_valkey',
+        'section' => 'nCore_valkey',
         'type' => 'text',
     ));
     $wp_customize->add_setting('valkey_port', array(
@@ -237,10 +237,10 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control('valkey_port', array(
         'label' => __('ValKey Port', 'nierto_cube'),
-        'section' => 'nierto_cube_valkey',
+        'section' => 'nCore_valkey',
         'type' => 'number',
     ));
-    $wp_customize->add_setting('nierto_cube_settings[valkey_auth]', array(
+    $wp_customize->add_setting('nCore_settings[valkey_auth]', array(
     'type' => 'option',
     'capability' => 'manage_options',
     'default' => '',
@@ -248,18 +248,18 @@ function nierto_cube_customize_register($wp_customize) {
     'sanitize_callback' => 'sanitize_text_field',
     ));
 
-    $wp_customize->add_control('nierto_cube_settings[valkey_auth]', array(
+    $wp_customize->add_control('nCore_settings[valkey_auth]', array(
         'label' => __('ValKey Authentication Key', 'nierto_cube'),
-        'section' => 'nierto_cube_valkey',
+        'section' => 'nCore_valkey',
         'type' => 'password',
     ));
-    $wp_customize->add_setting('nierto_cube_cache_prefix', array(
-        'default' => 'nierto_cube_',
+    $wp_customize->add_setting('nCore_cache_prefix', array(
+        'default' => 'nCore_',
         'sanitize_callback' => 'sanitize_text_field',
     ));
-    $wp_customize->add_control('nierto_cube_cache_prefix', array(
+    $wp_customize->add_control('nCore_cache_prefix', array(
         'label' => __('Cache Prefix', 'nierto_cube'),
-        'section' => 'nierto_cube_valkey',
+        'section' => 'nCore_valkey',
         'type' => 'text',
     ));
     // INDEX OF SECTION: PWA SETTINGS
@@ -270,7 +270,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control('enable_pwa', array(
         'label' => __('Enable PWA Functionality', 'nierto_cube'),
-        'section' => 'nierto_cube_pwa',
+        'section' => 'nCore_pwa',
         'type' => 'checkbox',
     ));
     $wp_customize->add_setting('pwa_icon_192', array(
@@ -279,7 +279,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'pwa_icon_192', array(
         'label' => __('PWA Icon (192x192)', 'nierto_cube'),
-        'section' => 'nierto_cube_pwa',
+        'section' => 'nCore_pwa',
         'settings' => 'pwa_icon_192',
     )));
     $wp_customize->add_setting('pwa_icon_512', array(
@@ -288,7 +288,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'pwa_icon_512', array(
         'label' => __('PWA Icon (512x512)', 'nierto_cube'),
-        'section' => 'nierto_cube_pwa',
+        'section' => 'nCore_pwa',
         'settings' => 'pwa_icon_512',
     )));
     $wp_customize->add_setting('pwa_short_name', array(
@@ -297,7 +297,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control('pwa_short_name', array(
         'label' => __('PWA Short Name', 'nierto_cube'),
-        'section' => 'nierto_cube_pwa',
+        'section' => 'nCore_pwa',
         'type' => 'text',
     ));
     $wp_customize->add_setting('pwa_background_color', array(
@@ -306,7 +306,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'pwa_background_color', array(
         'label' => __('PWA Background Color', 'nierto_cube'),
-        'section' => 'nierto_cube_pwa',
+        'section' => 'nCore_pwa',
     )));
     $wp_customize->add_setting('pwa_theme_color', array(
         'default' => '#000000',
@@ -314,7 +314,7 @@ function nierto_cube_customize_register($wp_customize) {
     ));
     $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'pwa_theme_color', array(
         'label' => __('PWA Theme Color', 'nierto_cube'),
-        'section' => 'nierto_cube_pwa',
+        'section' => 'nCore_pwa',
     )));
     $wp_customize->add_setting('pwa_install_banner', array(
         'default' => '',
@@ -323,7 +323,7 @@ function nierto_cube_customize_register($wp_customize) {
     $wp_customize->add_control(new WP_Customize_Image_Control($wp_customize, 'pwa_install_banner', array(
         'label' => __('PWA Install Banner Image', 'nierto_cube'),
         'description' => __('Upload an image to use as the install banner. If not set, a default banner will be used.', 'nierto_cube'),
-        'section' => 'nierto_cube_pwa',
+        'section' => 'nCore_pwa',
         'settings' => 'pwa_install_banner',
     )));
     // INDEX OF SECTION: CUBE SETTINGS
@@ -349,7 +349,7 @@ function nierto_cube_customize_register($wp_customize) {
         $wp_customize->add_setting($id, [
             'default' => $values['default'],
             'transport' => 'refresh',
-            'sanitize_callback' => 'nierto_cube_sanitize_css_value'
+            'sanitize_callback' => 'nCore_sanitize_css_value'
         ]);
         $wp_customize->add_control($id, [
             'label' => __($values['label'], 'nierto_cube'),
@@ -562,13 +562,13 @@ foreach ($font_settings as $setting_id => $values) {
         ));
     }
     // INDEX OF SECTION: ZOOM (Content Expansion Options)
-    $wp_customize->add_setting('nierto_cube_max_zoom', array(
+    $wp_customize->add_setting('nCore_max_zoom', array(
         'default' => '90',
         'sanitize_callback' => 'absint',
     ));
-    $wp_customize->add_control('nierto_cube_max_zoom', array(
+    $wp_customize->add_control('nCore_max_zoom', array(
         'label' => __('Maximum Content Zoom (%)', 'nierto_cube'),
-        'section' => 'nierto_cube_content_options',
+        'section' => 'nCore_content_options',
         'type' => 'range',
         'input_attrs' => array(
             'min' => 80,
@@ -576,13 +576,13 @@ foreach ($font_settings as $setting_id => $values) {
             'step' => 1,
         ),
     ));
-    $wp_customize->add_setting('nierto_cube_long_press_duration', array(
+    $wp_customize->add_setting('nCore_long_press_duration', array(
         'default' => '1300',
         'sanitize_callback' => 'absint',
     ));
-    $wp_customize->add_control('nierto_cube_long_press_duration', array(
+    $wp_customize->add_control('nCore_long_press_duration', array(
         'label' => __('Long Press Duration (ms)', 'nierto_cube'),
-        'section' => 'nierto_cube_content_options',
+        'section' => 'nCore_content_options',
         'type' => 'range',
         'input_attrs' => array(
             'min' => 500,
@@ -592,4 +592,4 @@ foreach ($font_settings as $setting_id => $values) {
     ));
 }
 
-add_action('customize_register', 'nierto_cube_customize_register');
+add_action('customize_register', 'nCore_customize_register');

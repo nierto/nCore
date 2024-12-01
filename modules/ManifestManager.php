@@ -2,11 +2,11 @@
 /**
  * ManifestManager - Progressive Web App (PWA) Manifest Management
  * 
- * This class manages the Progressive Web App manifest functionality for the NiertoCube theme.
+ * This class manages the Progressive Web App manifest functionality for the nCore theme.
  * It handles manifest generation, caching, and delivery through both REST API and direct access.
  * It implements proper ModuleInterface integration within the nCore system.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  PWA
  * @version     2.0.0
  * @since       1.0.0
@@ -107,19 +107,19 @@
  * - REST API support
  * 
  * @author    Niels Erik Toren
- * @copyright 2024 NiertoCube
+ * @copyright 2024 nCore
  * @license   See project root for license information
  * @link      https://nierto.com Documentation
  * 
- * @see \NiertoCube\Core\ModuleInterface
- * @see \NiertoCube\Core\nCore
+ * @see \nCore\Core\ModuleInterface
+ * @see \nCore\Core\nCore
  */
 
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\nCore;
+use nCore\Core\ModuleInterface;
+use nCore\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -201,7 +201,7 @@ class ManifestManager implements ModuleInterface {
      * Register REST API endpoints
      */
     public function registerEndpoints(): void {
-        register_rest_route('niertocube/v1', '/manifest', [
+        register_rest_route('nCore/v1', '/manifest', [
             'methods' => 'GET',
             'callback' => [$this, 'getManifestJson'],
             'permission_callback' => '__return_true'
@@ -304,7 +304,7 @@ class ManifestManager implements ModuleInterface {
             return;
         }
 
-        echo '<link rel="manifest" href="' . esc_url(rest_url('niertocube/v1/manifest')) . '">';
+        echo '<link rel="manifest" href="' . esc_url(rest_url('nCore/v1/manifest')) . '">';
         echo '<meta name="theme-color" content="' . esc_attr(get_theme_mod('pwa_theme_color', '#000000')) . '">';
     }
 
@@ -328,7 +328,7 @@ class ManifestManager implements ModuleInterface {
      */
     public function registerCustomizerSettings($wp_customize): void {
         // PWA Section
-        $wp_customize->add_section('nierto_cube_pwa', [
+        $wp_customize->add_section('nCore_pwa', [
             'title' => __('PWA Settings', 'nierto-cube'),
             'priority' => 35
         ]);
@@ -341,7 +341,7 @@ class ManifestManager implements ModuleInterface {
 
         $wp_customize->add_control('enable_pwa', [
             'label' => __('Enable PWA Functionality', 'nierto-cube'),
-            'section' => 'nierto_cube_pwa',
+            'section' => 'nCore_pwa',
             'type' => 'checkbox'
         ]);
 
@@ -367,7 +367,7 @@ class ManifestManager implements ModuleInterface {
             $wp_customize->add_control(
                 new \WP_Customize_Image_Control($wp_customize, "pwa_icon_{$size}", [
                     'label' => sprintf(__('PWA Icon (%s)', 'nierto-cube'), $size),
-                    'section' => 'nierto_cube_pwa'
+                    'section' => 'nCore_pwa'
                 ])
             );
         }
@@ -393,7 +393,7 @@ class ManifestManager implements ModuleInterface {
             $wp_customize->add_control(
                 new \WP_Customize_Color_Control($wp_customize, "pwa_{$key}", [
                     'label' => $label,
-                    'section' => 'nierto_cube_pwa'
+                    'section' => 'nCore_pwa'
                 ])
             );
         }
@@ -418,7 +418,7 @@ class ManifestManager implements ModuleInterface {
 
             $wp_customize->add_control("pwa_{$key}", [
                 'label' => $label,
-                'section' => 'nierto_cube_pwa',
+                'section' => 'nCore_pwa',
                 'type' => 'text'
             ]);
         }

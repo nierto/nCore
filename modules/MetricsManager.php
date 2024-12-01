@@ -1,12 +1,12 @@
 <?php
 /**
- * NiertoCube Metrics Management System
+ * nCore Metrics Management System
  * 
  * Provides comprehensive metrics collection, analysis, and reporting functionality
- * for the NiertoCube theme. Integrates with other core managers for complete
+ * for the nCore theme. Integrates with other core managers for complete
  * system monitoring and performance tracking.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Modules\Metrics
  * @version     2.0.0
  * @since       2.0.0
@@ -39,13 +39,13 @@
  * - Data sanitization
  * 
  * @author    Niels Erik Toren
- * @copyright 2024 NiertoCube
+ * @copyright 2024 nCore
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\nCore;
+use nCore\Core\ModuleInterface;
+use nCore\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -61,10 +61,10 @@ class MetricsManager implements ModuleInterface {
     /** @var array Configuration settings */
     private $config = [];
     
-    /** @var \NiertoCube\Modules\CacheManager */
+    /** @var \nCore\Modules\CacheManager */
     private $cache;
     
-    /** @var \NiertoCube\Modules\ErrorManager */
+    /** @var \nCore\Modules\ErrorManager */
     private $error;
     
     /** @var bool Initialization state */
@@ -208,7 +208,7 @@ class MetricsManager implements ModuleInterface {
         }
 
         // Cleanup schedule
-        add_action('nierto_cube_metrics_cleanup', [$this, 'cleanupOldMetrics']);
+        add_action('nCore_metrics_cleanup', [$this, 'cleanupOldMetrics']);
     }
 
     /**
@@ -445,8 +445,8 @@ class MetricsManager implements ModuleInterface {
      * Schedule metrics cleanup
      */
     private function scheduleCleanup(): void {
-        if (!wp_next_scheduled('nierto_cube_metrics_cleanup')) {
-            wp_schedule_event(time(), 'daily', 'nierto_cube_metrics_cleanup');
+        if (!wp_next_scheduled('nCore_metrics_cleanup')) {
+            wp_schedule_event(time(), 'daily', 'nCore_metrics_cleanup');
         }
     }
 
@@ -548,7 +548,7 @@ class MetricsManager implements ModuleInterface {
             'types' => array_keys($this->metric_types),
             'cache_available' => $this->cache?->isAvailable(),
             'storage_mode' => $this->config['storage_mode'],
-            'last_cleanup' => get_option('nierto_cube_last_cleanup'),
+            'last_cleanup' => get_option('nCore_last_cleanup'),
             'error_count' => $this->error?->getErrorCount('metrics')
         ];
     }
@@ -576,8 +576,8 @@ class MetricsManager implements ModuleInterface {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                                 body: new URLSearchParams({
-                                    action: 'nierto_cube_record_metric',
-                                    nonce: '" . wp_create_nonce('nierto_cube_metrics') . "',
+                                    action: 'nCore_record_metric',
+                                    nonce: '" . wp_create_nonce('nCore_metrics') . "',
                                     metric: JSON.stringify(metric)
                                 })
                             });

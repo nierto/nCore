@@ -2,15 +2,15 @@
     "name": "nierto/nCore",
     "description": "Modular WordPress theme development framework",
     "type": "wordpress-theme",
-    "license": "NiertoCube",
+    "license": "nCore",
     "require": {
         "php": ">=7.4",
         "composer/installers": "~1.0"
     },
     "autoload": {
         "psr-4": {
-            "NiertoCube\\": "core/",
-            "NiertoCube\\Modules\\": "modules/"
+            "nCore\\": "core/",
+            "nCore\\Modules\\": "modules/"
         }
     },
     "require-dev": {

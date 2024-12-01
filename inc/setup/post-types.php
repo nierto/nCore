@@ -1,19 +1,19 @@
 <?php
 /**
- * NiertoCube Post Types Management
+ * nCore Post Types Management
  * 
  * Manages registration and configuration of custom post types,
  * particularly the cube_face post type and its associated metadata.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  PostTypes
  * @version     2.0.0
  */
 
-namespace NiertoCube\PostTypes;
+namespace nCore\PostTypes;
 
-use NiertoCube\Core\ModuleInterface;
-use NiertoCube\Core\nCore;
+use nCore\Core\ModuleInterface;
+use nCore\Core\nCore;
 
 if (!defined('ABSPATH')) {
     exit;

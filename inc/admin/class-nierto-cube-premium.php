@@ -3,7 +3,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class NiertoCube_Premium {
+class nCore_Premium {
     private static $instance = null;
 
     public static function get_instance() {
@@ -14,15 +14,15 @@ class NiertoCube_Premium {
     }
 
     private function __construct() {
-        add_action('nierto_cube_admin_page', array($this, 'render_premium_plugins_section'));
-        add_action('wp_ajax_nierto_cube_activate_premium_plugin', array($this, 'handle_plugin_activation'));
+        add_action('nCore_admin_page', array($this, 'render_premium_plugins_section'));
+        add_action('wp_ajax_nCore_activate_premium_plugin', array($this, 'handle_plugin_activation'));
     }
 
     public function render_premium_plugins_section() {
         $premium_plugins = [
             'Woocommerce Plugin' => 'Integrate with WooCommerce and display product images inside the cube.',
             'LLM Plugin' => 'Connect to your own local LLM or an LLM hosted by Agentique.ai.',
-            'SEO Plugin' => 'Enhance SEO scores specifically for NiertoCube.',
+            'SEO Plugin' => 'Enhance SEO scores specifically for nCore.',
             'Image Optimization Plugin' => 'Render images on cube sides and optimize uploaded images.',
             'Contact Plugin' => 'Specialized contact form with call-to-action buttons for messaging apps.'
         ];
@@ -63,7 +63,7 @@ class NiertoCube_Premium {
     }
 
     public function handle_plugin_activation() {
-        check_ajax_referer('nierto_cube_admin', 'nonce');
+        check_ajax_referer('nCore_admin', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Insufficient permissions');
@@ -76,4 +76,4 @@ class NiertoCube_Premium {
 }
 
 // Initialize the premium plugins functionality
-NiertoCube_Premium::get_instance();
+nCore_Premium::get_instance();

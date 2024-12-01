@@ -6,7 +6,7 @@
  * Provides a modular foundation for different UI implementations
  * while maintaining consistent core services.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Core
  * @version     2.0.0
  * 
@@ -23,7 +23,7 @@
  * Level 2: Optimization, Manifest
  */
 
-namespace NiertoCube\Core;
+namespace nCore\Core;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -53,39 +53,39 @@ class NiertoCore {
     private const CORE_MODULES = [
         // Base Level (No Dependencies)
         'Error' => [
-            'class' => 'NiertoCube\\Modules\\ErrorManager',
+            'class' => 'nCore\\Modules\\ErrorManager',
             'priority' => 1,
             'dependencies' => [],
             'required' => true
         ],
         'Cache' => [
-            'class' => 'NiertoCube\\Modules\\CacheManager',
+            'class' => 'nCore\\Modules\\CacheManager',
             'priority' => 2,
             'dependencies' => [],
             'required' => true
         ],
         // First Level
         'Metrics' => [
-            'class' => 'NiertoCube\\Modules\\MetricsManager',
+            'class' => 'nCore\\Modules\\MetricsManager',
             'priority' => 3,
             'dependencies' => ['Error', 'Cache'],
             'required' => false
         ],
         'API' => [
-            'class' => 'NiertoCube\\Modules\\APIManager',
+            'class' => 'nCore\\Modules\\APIManager',
             'priority' => 4,
             'dependencies' => ['Error', 'Cache'],
             'required' => false
         ],
         // Second Level
         'Optimization' => [
-            'class' => 'NiertoCube\\Modules\\OptimizationManager',
+            'class' => 'nCore\\Modules\\OptimizationManager',
             'priority' => 5,
             'dependencies' => ['Error', 'Cache', 'Metrics'],
             'required' => false
         ],
         'Manifest' => [
-            'class' => 'NiertoCube\\Modules\\ManifestManager',
+            'class' => 'nCore\\Modules\\ManifestManager',
             'priority' => 6,
             'dependencies' => ['Error', 'Cache', 'API'],
             'required' => false
@@ -317,17 +317,17 @@ class NiertoCore {
     }
 
     /**
-     * Setup autoloader for NiertoCube classes
+     * Setup autoloader for nCore classes
      */
     private function setupAutoloader(): void {
         spl_autoload_register(function ($class) {
             // Only handle our namespace
-            if (strpos($class, 'NiertoCube\\') !== 0) {
+            if (strpos($class, 'nCore\\') !== 0) {
                 return;
             }
 
             $class_path = str_replace('\\', '/', $class);
-            $class_path = str_replace('NiertoCube/', '', $class_path);
+            $class_path = str_replace('nCore/', '', $class_path);
             $file = get_template_directory() . '/inc/' . $class_path . '.php';
 
             if (file_exists($file)) {

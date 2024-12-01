@@ -1,5 +1,5 @@
 <?php
-namespace NiertoCube\Cache;
+namespace nCore\Cache;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -8,10 +8,10 @@ if (!defined('ABSPATH')) {
 /**
  * Interface CacheStrategyInterface
  * 
- * Defines the contract for cache implementations in NiertoCube theme.
+ * Defines the contract for cache implementations in nCore theme.
  * Used by ValKeyStrategy and TransientStrategy.
  * 
- * @package NiertoCube
+ * @package nCore
  * @subpackage Cache
  * @since 1.0.0
  */

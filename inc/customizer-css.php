@@ -1,11 +1,11 @@
 <?php
 /**
- * NiertoCube Theme Customizer CSS Generation
+ * nCore Theme Customizer CSS Generation
  * 
  * This file handles the dynamic generation of CSS based on WordPress Theme Customizer settings.
  * It creates CSS custom properties (variables) and applies them to various theme elements.
  *
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Customizer
  * @since       1.0.0
  * 
@@ -20,7 +20,7 @@
  * - Core WordPress functions: get_theme_mod(), get_font_family()
  * 
  * @functions
- * - nierto_cube_customizer_css(): Primary function for CSS generation
+ * - nCore_customizer_css(): Primary function for CSS generation
  *   Handles:
  *   - Root CSS variables for colors, gradients, dimensions
  *   - Navigation button styling
@@ -81,7 +81,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-function nierto_cube_customizer_css() {
+function nCore_customizer_css() {
     $cube_four_bg_image = get_theme_mod('cube_four_bg_image', '');
     function prepend_hash($color) {
         return strpos($color, '#') === 0 ? $color : '#' . $color;
@@ -162,4 +162,4 @@ function nierto_cube_customizer_css() {
     <?php
 }
 
-add_action('wp_head', 'nierto_cube_customizer_css');
+add_action('wp_head', 'nCore_customizer_css');

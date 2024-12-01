@@ -2,11 +2,11 @@
 /**
  * APIManager - Independent REST API Management System
  * 
- * Provides comprehensive REST API functionality for the NiertoCube theme without external
+ * Provides comprehensive REST API functionality for the nCore theme without external
  * manager dependencies. Handles endpoint registration, request processing, response caching,
  * rate limiting, and performance monitoring as a base-level service.
  * 
- * @package     NiertoCube
+ * @package     nCore
  * @subpackage  Core
  * @version     2.0.0
  * @since       1.0.0
@@ -127,18 +127,18 @@
  * - Simple caching system
  * 
  * @author    Niels Erik Toren
- * @copyright 2024 NiertoCube
+ * @copyright 2024 nCore
  * @license   See project root for license information
  * @link      https://nierto.com Documentation
  * 
- * @see \NiertoCube\Core\ModuleInterface
+ * @see \nCore\Core\ModuleInterface
  * @see WP_REST_Request
  * @see WP_REST_Response
  */
 
-namespace NiertoCube\Modules;
+namespace nCore\Modules;
 
-use NiertoCube\Core\ModuleInterface;
+use nCore\Core\ModuleInterface;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -213,7 +213,7 @@ class APIManager implements ModuleInterface {
                 'rate_limiting' => true,
                 'cache_ttl' => HOUR_IN_SECONDS,
                 'debug' => WP_DEBUG,
-                'namespace' => 'niertocube/v1'
+                'namespace' => 'nCore/v1'
             ], $config);
 
             add_action('rest_api_init', [$this, 'registerCoreEndpoints']);
@@ -272,14 +272,46 @@ class APIManager implements ModuleInterface {
         try {
             $type = $request->get_param('type');
             $slug = $request->get_param('slug');
-            
-            if ($type === 'page') {
+            $cache_key = "face_content_{$type}_{$slug}";
+
+            // Try to get from cache first
+            if ($this->config['cache_enabled']) {
+                $cached = $this->getResponse($cache_key, 'face');
+                if ($cached !== null) {
+                    $this->metrics['cache_hits']++;
+                    return new WP_REST_Response($cached);
+                }
+                $this->metrics['cache_misses']++;
+            }
+
+            // Get the face settings from theme mods
+            $face_settings = null;
+            for ($i = 1; $i <= 6; $i++) {
+                if (get_theme_mod("cube_face_{$i}_slug") === $slug) {
+                    $face_settings = [
+                        'type' => get_theme_mod("cube_face_{$i}_type", "page"),
+                        'slug' => $slug,
+                        'position' => get_theme_mod("cube_face_{$i}_position", "face" . ($i - 1)),
+                    ];
+                    break;
+                }
+            }
+
+            if (!$face_settings) {
+                return new WP_REST_Response(['error' => 'Face content not found'], 404);
+            }
+
+            if ($face_settings['type'] === 'page') {
                 $page = get_page_by_path($slug);
                 if ($page) {
-                    return new WP_REST_Response([
+                    $response_data = [
                         'type' => 'page',
-                        'content' => get_permalink($page->ID)
-                    ]);
+                        'content' => get_permalink($page->ID),
+                        'title' => $page->post_title,
+                        'position' => $face_settings['position']
+                    ];
+                } else {
+                    return new WP_REST_Response(['error' => 'Page not found'], 404);
                 }
             } else {
                 $posts = get_posts([
@@ -291,17 +323,35 @@ class APIManager implements ModuleInterface {
 
                 if ($posts) {
                     $post = $posts[0];
-                    return new WP_REST_Response([
+                    $response_data = [
                         'type' => 'post',
                         'content' => apply_filters('the_content', $post->post_content),
                         'title' => $post->post_title,
                         'template' => get_post_meta($post->ID, '_cube_face_template', true),
-                        'position' => get_post_meta($post->ID, '_cube_face_position', true)
-                    ]);
+                        'position' => $face_settings['position'],
+                        'meta' => [
+                            'template' => get_post_meta($post->ID, '_cube_face_template', true),
+                            'settings' => get_post_meta($post->ID, '_cube_face_settings', true)
+                        ]
+                    ];
+
+                    // Get sidebar content if widgets are supported
+                    if (is_active_sidebar('cube-face-sidebar')) {
+                        ob_start();
+                        dynamic_sidebar('cube-face-sidebar');
+                        $response_data['sidebar'] = ob_get_clean();
+                    }
+                } else {
+                    return new WP_REST_Response(['error' => 'Custom post not found'], 404);
                 }
             }
 
-            return new WP_REST_Response(['error' => 'Content not found'], 404);
+            // Cache the response
+            if ($this->config['cache_enabled']) {
+                $this->cacheResponse($cache_key, $response_data, self::CACHE_GROUPS['face']['ttl'], 'face');
+            }
+
+            return new WP_REST_Response($response_data);
 
         } catch (\Exception $e) {
             $this->logAPIError('Face content retrieval failed: ' . $e->getMessage());
