@@ -34,7 +34,9 @@
  */
 
 namespace nCore\Modules;
+namespace nCore\Modules\OptimizationManager
 
+use nCore\Modules\AdvancedOptimizations;
 use nCore\Core\ModuleInterface;
 use nCore\Core\nCore;
 

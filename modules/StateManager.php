@@ -20,12 +20,31 @@
 namespace nCore\Modules;  
 
 use nCore\Core\ModuleInterface;
-use nCore\Cache\CacheStrategyInterface;
-use nCore\Modules\ErrorManager;
-use nCore\Modules\ResourceManager;
-use nCore\Modules\CacheManager;
+use nCore\Modules\StateManager\StateManipulation;
+use nCore\Modules\StateManager\StateObservation;
+use nCore\Modules\StateManager\HistoryManagement;
+use nCore\Modules\StateManager\StateSynchronization;
+use nCore\Modules\StateManager\StateTransactions;
+use nCore\Modules\StateManager\StateDiagnostics;
+use nCore\Modules\StateManager\StateIntegrations;
+use nCore\Modules\StateManager\StatePerformance;
+use nCore\Modules\StateManager\StateSecurity;
+use nCore\Modules\StateManager\StatePersistence;
+use nCore\Modules\StateManager\StateSynchronization;
+use nCore\Modules\StateManager\StateTransactions;
 
 class StateManager implements ModuleInterface, \ArrayAccess {
+    use StateManipulation;
+    use StateObservation;
+    use HistoryManagement;
+    use StateDiagnostics;
+    use StateIntegrations;
+    use StatePerformance;
+    use StateSecurity;
+    use StatePersistence;
+    use StateSynchronization;
+    use StateTransactions;
+    
     /** @var StateManager Singleton instance */
     private static $instance = null;
 
@@ -82,6 +101,14 @@ class StateManager implements ModuleInterface, \ArrayAccess {
 
     /** @var bool Initialization state */
     private $initialized = false;
+
+     /** @var array Internal performance metrics */
+    private $internalMetrics = [
+        'operations' => [],
+        'timings' => [],
+        'memory' => []
+    ];
+
 
      /**
      * Initialize core dependencies
@@ -144,17 +171,58 @@ class StateManager implements ModuleInterface, \ArrayAccess {
     }
 
     /**
-     * Initialize metrics tracking
+     * Initialize internal metrics tracking
      */
     private function initializeMetrics(): void {
-        $this->metrics = [
-            'state_updates' => 0,
-            'cache_hits' => 0,
-            'cache_misses' => 0,
-            'transaction_count' => 0,
-            'observer_notifications' => 0,
-            'start_time' => microtime(true)
+        $this->internalMetrics = [
+            'operations' => [
+                'state_updates' => 0,
+                'cache_operations' => 0,
+                'transactions' => 0,
+                'notifications' => 0
+            ],
+            'timings' => [
+                'start_time' => microtime(true),
+                'last_update' => null
+            ],
+            'memory' => [
+                'initial' => memory_get_usage(true),
+                'peak' => 0
+            ]
         ];
+    }
+
+    /**
+     * Record internal metric
+     */
+    private function recordMetric(string $type, string $operation, $value = 1): void {
+        if (!$this->config['debug_mode']) {
+            return;
+        }
+
+        // Update operation count
+        if (isset($this->internalMetrics['operations'][$operation])) {
+            $this->internalMetrics['operations'][$operation] += $value;
+        }
+
+        // Update timing
+        $this->internalMetrics['timings']['last_update'] = microtime(true);
+
+        // Update memory peak
+        $this->internalMetrics['memory']['peak'] = max(
+            $this->internalMetrics['memory']['peak'],
+            memory_get_usage(true)
+        );
+
+        // Log if ErrorManager available
+        if ($this->errorManager && $this->config['debug_mode']) {
+            $this->errorManager->logDebug('state_metric', [
+                'type' => $type,
+                'operation' => $operation,
+                'value' => $value,
+                'memory_delta' => memory_get_usage(true) - $this->internalMetrics['memory']['initial']
+            ]);
+        }
     }
 
     /**

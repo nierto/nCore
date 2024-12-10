@@ -151,6 +151,8 @@ if (!defined('ABSPATH')) {
 class CacheManager implements ModuleInterface {
     /** @var CacheManager Singleton instance */
     private static $instance = null;
+
+    private $internal_version = '';
     
     /** @var array Cache configuration */
     private $config = [];
@@ -279,6 +281,17 @@ class CacheManager implements ModuleInterface {
             'ttl' => DAY_IN_SECONDS,
             'version' => '1.0'
         ]);
+    }
+
+    private function generateVersion(): string {
+        return hash('xxh3', serialize([
+            'timestamp' => time(),
+            'random' => random_bytes(8)
+        ]));
+    }
+    
+    private function invalidateCache(): void {
+        $this->internal_version = $this->generateVersion();
     }
 
     /**
