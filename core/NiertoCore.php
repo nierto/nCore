@@ -18,9 +18,9 @@
  * - Handles autoloading and error management
  * 
  * Dependency Hierarchy:
- * Level 0 (Base): Error, Cache
- * Level 1: Metrics, API
- * Level 2: Optimization, Manifest
+ * Level 0 (Base): Security, Error, Cache
+ * Level 1: Metrics, API, Font, Resource, State, Version
+ * Level 2: Optimization, Manifest, SEO, Content, Cookie
  */
 
 namespace nCore\Core;
@@ -44,50 +44,100 @@ class NiertoCore {
 
     /** @var array Module dependency levels */
     private const MODULE_LEVELS = [
-        0 => ['Error', 'Cache'],              // Base level - no dependencies
-        1 => ['Metrics', 'API'],              // First level - depends on base
-        2 => ['Optimization', 'Manifest']      // Second level - depends on first
+        0 => ['Security', 'Error', 'Cache'],
+        1 => ['Metrics', 'API', 'Font', 'Resource', 'State', 'Version'],
+        2 => ['Optimization', 'Manifest', 'SEO', 'Content', 'Cookie']
     ];
 
     /** @var array Core module definitions */
     private const CORE_MODULES = [
-        // Base Level (No Dependencies)
+        // Level 0 (Base)
+        'Security' => [
+            'class' => 'nCore\\Modules\\SecurityManager',
+            'priority' => 1,
+            'dependencies' => [],
+            'required' => true
+        ],
         'Error' => [
             'class' => 'nCore\\Modules\\ErrorManager',
-            'priority' => 1,
+            'priority' => 2,
             'dependencies' => [],
             'required' => true
         ],
         'Cache' => [
             'class' => 'nCore\\Modules\\CacheManager',
-            'priority' => 2,
+            'priority' => 3,
             'dependencies' => [],
             'required' => true
         ],
-        // First Level
+        
+        // Level 1
         'Metrics' => [
             'class' => 'nCore\\Modules\\MetricsManager',
-            'priority' => 3,
+            'priority' => 4,
             'dependencies' => ['Error', 'Cache'],
             'required' => false
         ],
         'API' => [
             'class' => 'nCore\\Modules\\APIManager',
-            'priority' => 4,
+            'priority' => 5,
             'dependencies' => ['Error', 'Cache'],
             'required' => false
         ],
-        // Second Level
+        'Font' => [
+            'class' => 'nCore\\Modules\\FontManager',
+            'priority' => 6,
+            'dependencies' => ['Error', 'Cache'],
+            'required' => false
+        ],
+        'Resource' => [
+            'class' => 'nCore\\Modules\\ResourceManager',
+            'priority' => 7,
+            'dependencies' => ['Error', 'Cache'],
+            'required' => false
+        ],
+        'State' => [
+            'class' => 'nCore\\Modules\\StateManager',
+            'priority' => 8,
+            'dependencies' => ['Error', 'Cache'],
+            'required' => false
+        ],
+        'Version' => [
+            'class' => 'nCore\\Modules\\VersionManager',
+            'priority' => 9,
+            'dependencies' => ['Error', 'Cache'],
+            'required' => false
+        ],
+
+        // Level 2
         'Optimization' => [
             'class' => 'nCore\\Modules\\OptimizationManager',
-            'priority' => 5,
+            'priority' => 10,
             'dependencies' => ['Error', 'Cache', 'Metrics'],
             'required' => false
         ],
         'Manifest' => [
             'class' => 'nCore\\Modules\\ManifestManager',
-            'priority' => 6,
+            'priority' => 11,
             'dependencies' => ['Error', 'Cache', 'API'],
+            'required' => false
+        ],
+        'SEO' => [
+            'class' => 'nCore\\Modules\\SEOManager',
+            'priority' => 12,
+            'dependencies' => ['Error', 'Cache', 'State'],
+            'required' => false
+        ],
+        'Content' => [
+            'class' => 'nCore\\Modules\\ContentManager',
+            'priority' => 13,
+            'dependencies' => ['Error', 'Cache', 'State'],
+            'required' => false
+        ],
+        'Cookie' => [
+            'class' => 'nCore\\Modules\\CookieManager',
+            'priority' => 14,
+            'dependencies' => ['Error', 'Cache', 'State'],
             'required' => false
         ]
     ];
@@ -162,12 +212,15 @@ class NiertoCore {
      * 
      * @throws \Exception If initialization fails
      */
-    public function initialize(): void {
+    public function initialize(array $config = []): void {
         if ($this->initialized) {
             return;
         }
 
         try {
+            // Update configuration with provided config
+            $this->config = array_replace_recursive($this->config, $config);
+
             // Register core modules
             $this->registerCoreModules();
 
@@ -201,14 +254,29 @@ class NiertoCore {
      */
     private function registerCoreModules(): void {
         foreach (self::CORE_MODULES as $name => $info) {
-            $this->registerModule(
-                $name,
-                $info['class'],
-                $info['dependencies'],
-                $info['required'],
-                $info['priority'],
-                $this->config['modules'][strtolower($name)] ?? []
-            );
+            $moduleConfig = $this->config['modules'][strtolower($name)] ?? [];
+            
+            try {
+                $this->registerModule(
+                    $name,
+                    $info['class'],
+                    $info['dependencies'],
+                    $info['required'],
+                    $info['priority'],
+                    $moduleConfig
+                );
+            } catch (\Exception $e) {
+                if ($info['required']) {
+                    throw $e;
+                }
+                // Log error for non-required modules
+                if ($this->isModuleInitialized('Error')) {
+                    $this->getModule('Error')->logError(
+                        'module_registration_failed',
+                        "Failed to register module {$name}: " . $e->getMessage()
+                    );
+                }
+            }
         }
     }
 
@@ -375,6 +443,23 @@ class NiertoCore {
         }
 
         return $status;
+    }
+
+    /**
+     * Get initialization order for debugging
+     */
+    public function getInitializationOrder(): array {
+        $order = [];
+        foreach (self::MODULE_LEVELS as $level => $modules) {
+            $order[$level] = array_map(function($name) {
+                return [
+                    'name' => $name,
+                    'priority' => self::CORE_MODULES[$name]['priority'],
+                    'dependencies' => self::CORE_MODULES[$name]['dependencies']
+                ];
+            }, $modules);
+        }
+        return $order;
     }
 
     // Prevent cloning and unserialization
